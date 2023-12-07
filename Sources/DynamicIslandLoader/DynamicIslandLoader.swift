@@ -1,7 +1,7 @@
 import UIKit
 
 public class DynamicIslandLoader: UIView, CAAnimationDelegate {
-    static let shared = DynamicIslandLoader()
+    public static let shared = DynamicIslandLoader()
     
     public var colors: [UIColor] = [.red, .blue]
     public var currentColorIndex = 0
@@ -12,7 +12,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     private var isAnimating = false
     fileprivate var restoreAnimation = false
     
-    init() {
+    public init() {
         super.init(frame: .zero)
         if let window = UIApplication.shared.connectedScenes
             .flatMap({ ($0 as? UIWindowScene)?.windows ?? [] })
