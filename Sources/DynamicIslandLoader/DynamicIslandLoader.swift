@@ -26,7 +26,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func show() {
+    public func show() {
         guard !isAnimating else { return }
         isAnimating = true
         resetProgressIndicator()
@@ -40,7 +40,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
         }
     }
     
-    func hide() {
+    public func hide() {
         updateVisibility(isHidden: true)
         resetProgressIndicator()
         
