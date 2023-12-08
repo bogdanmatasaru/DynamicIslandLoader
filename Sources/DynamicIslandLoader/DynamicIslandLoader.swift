@@ -1,8 +1,6 @@
 import UIKit
 
 public class DynamicIslandLoader: UIView, CAAnimationDelegate {
-    public static let shared = DynamicIslandLoader()
-    
     public var colors: [UIColor] = [.red, .blue]
     public var currentColorIndex = 0
     public var animateColorsChange = false
@@ -11,15 +9,21 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     private let secondarylLayer: CAShapeLayer = CAShapeLayer()
     private var isAnimating = false
     fileprivate var restoreAnimation = false
+    fileprivate var addedToWindow = false
+    fileprivate var dissmissTriggered = false
     
     public init() {
         super.init(frame: .zero)
+        self.registerForAppEvents()
+    }
+    
+    func addToWindow() {
         if let window = UIApplication.shared.connectedScenes
             .flatMap({ ($0 as? UIWindowScene)?.windows ?? [] })
             .last(where: { $0.isKeyWindow }), isAvailable {
                 addLoader(toContext: window)
+                addedToWindow = true
             }
-        self.registerForAppEvents()
     }
     
     required init?(coder: NSCoder) {
@@ -28,6 +32,9 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     
     public func show() {
         guard !isAnimating else { return }
+        if !addedToWindow {
+            self.addToWindow()
+        }
         isAnimating = true
         resetProgressIndicator()
         
@@ -41,13 +48,17 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     }
     
     public func hide() {
-        updateVisibility(isHidden: true)
-        resetProgressIndicator()
-        
-        isAnimating = false
-        restoreAnimation = false
+        guard !dissmissTriggered else { return }
+        dissmissTriggered = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+            self.updateVisibility(isHidden: true)
+            self.resetProgressIndicator()
+            
+            self.isAnimating = false
+            self.restoreAnimation = false
+            self.dissmissTriggered = false
+        }
     }
-    
     
     private func addLoader(toContext context: UIWindow) {
         initLoaderLayers()
