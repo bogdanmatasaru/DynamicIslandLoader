@@ -2,12 +2,14 @@ import UIKit
 
 public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     public var colors: [UIColor] = [.red, .blue]
-    public var currentColorIndex = 0
     public var animateColorsChange = false
+    public var minAnimationDuration = 2.5
+    
     
     private let mainLayer: CAShapeLayer = CAShapeLayer()
     private let secondarylLayer: CAShapeLayer = CAShapeLayer()
     private var isAnimating = false
+    private var currentColorIndex = 0
     fileprivate var restoreAnimation = false
     fileprivate var addedToWindow = false
     fileprivate var dissmissTriggered = false
@@ -50,7 +52,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     public func hide() {
         guard !dissmissTriggered else { return }
         dissmissTriggered = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + minAnimationDuration) {
             self.updateVisibility(isHidden: true)
             self.resetProgressIndicator()
             
