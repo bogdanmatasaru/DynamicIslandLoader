@@ -10,7 +10,6 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     private let secondarylLayer: CAShapeLayer = CAShapeLayer()
     private var isAnimating = false
     private var currentColorIndex = 0
-    fileprivate var restoreAnimation = false
     fileprivate var addedToWindow = false
     fileprivate var dissmissTriggered = false
     
@@ -57,7 +56,6 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
             self.resetProgressIndicator()
             
             self.isAnimating = false
-            self.restoreAnimation = false
             self.dissmissTriggered = false
         }
     }
@@ -229,21 +227,11 @@ extension DynamicIslandLoader {
         notificationCenter.addObserver(self, selector: #selector(appMovedToBackground),
                                        name: UIApplication.willResignActiveNotification,
                                        object: nil)
-        notificationCenter.addObserver(self, selector: #selector(appMovedToForeground),
-                                       name: UIApplication.didBecomeActiveNotification,
-                                       object: nil)
     }
     
     @objc func appMovedToBackground() {
         isAnimating = false
         updateVisibility(isHidden: true)
         resetProgressIndicator()
-        
-        restoreAnimation = true
-    }
-    
-    @objc func appMovedToForeground() {
-        guard restoreAnimation else { return }
-        show()
     }
 }
