@@ -36,6 +36,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
         if !addedToWindow {
             self.addToWindow()
         }
+        self.superview?.bringSubviewToFront(self)
         isAnimating = true
         resetProgressIndicator()
         
