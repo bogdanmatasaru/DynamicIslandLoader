@@ -5,7 +5,6 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     public var animateColorsChange = false
     public var minAnimationDuration = 2.5
     
-    
     private let mainLayer: CAShapeLayer = CAShapeLayer()
     private let secondarylLayer: CAShapeLayer = CAShapeLayer()
     private var isAnimating = false
@@ -69,7 +68,8 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     
     private func initLoaderLayers() {
         let size = CGSize(width: 126.0, height: 37.33)
-        let origin = CGPoint(x: UIScreen.main.bounds.midX - size.width / 2, y: 11)
+        let origin = CGPoint(x: UIScreen.main.bounds.midX - size.width / 2,
+                             y: is16Series ? 14 : 11)
         let rect = CGRect(origin: origin, size: CGSize(width: 126.0, height: 37.33))
         let cornerRadius = size.width / 2
         let dynamicIslandPath = UIBezierPath(roundedRect: rect,
@@ -121,13 +121,9 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
 }
 
 extension DynamicIslandLoader {
-    public var isAvailable: Bool {
-        if #unavailable(iOS 16) {
-            return false
-        }
-        
+    var identifier: String {
         #if targetEnvironment(simulator)
-            let identifier = ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]!
+            return ProcessInfo().environment["SIMULATOR_MODEL_IDENTIFIER"]!
         #else
             var systemInfo = utsname()
             uname(&systemInfo)
@@ -136,11 +132,32 @@ extension DynamicIslandLoader {
                 guard let value = element.value as? Int8, value != 0 else { return identifier }
                 return identifier + String(UnicodeScalar(UInt8(value)))
             }
+            return identifier
         #endif
-        
-        let hasIsland = identifier == "iPhone15,2" || identifier == "iPhone15,3" ||
-                        identifier == "iPhone15,4" || identifier == "iPhone15,5" ||
-                        identifier == "iPhone16,1" || identifier == "iPhone16,2"
+    }
+    
+    var is14Series: Bool {
+        return  identifier == "iPhone15,2" || identifier == "iPhone15,3"
+    }
+    
+    var is15Series: Bool {
+        return  identifier == "iPhone15,4" || identifier == "iPhone15,5" ||
+                identifier == "iPhone16,1" || identifier == "iPhone16,2"
+    }
+    
+    var is16Series: Bool {
+        return  identifier == "iPhone17,1" || identifier == "iPhone17,2" ||
+                identifier == "iPhone17,3" || identifier == "iPhone17,4"
+    }
+    
+    public var hasIsland: Bool {
+        return is14Series || is15Series || is16Series
+    }
+    
+    public var isAvailable: Bool {
+        if #unavailable(iOS 16) {
+            return false
+        }
         return hasIsland
     }
 }
