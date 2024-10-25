@@ -69,7 +69,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     private func initLoaderLayers() {
         let size = CGSize(width: 126.0, height: 37.33)
         let origin = CGPoint(x: UIScreen.main.bounds.midX - size.width / 2,
-                             y: is16Series ? 14 : 11)
+                             y: is16ProSeries ? 14 : 11)
         let rect = CGRect(origin: origin, size: CGSize(width: 126.0, height: 37.33))
         let cornerRadius = size.width / 2
         let dynamicIslandPath = UIBezierPath(roundedRect: rect,
@@ -148,6 +148,10 @@ extension DynamicIslandLoader {
     var is16Series: Bool {
         return  identifier == "iPhone17,1" || identifier == "iPhone17,2" ||
                 identifier == "iPhone17,3" || identifier == "iPhone17,4"
+    }
+    
+    var is16ProSeries: Bool {
+        return  identifier == "iPhone17,1" || identifier == "iPhone17,2"
     }
     
     public var hasIsland: Bool {
