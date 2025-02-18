@@ -88,6 +88,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
         mainLayer.strokeStart = 0
         mainLayer.strokeEnd = 1
         mainLayer.lineWidth = 5
+        mainLayer.fillColor = UIColor.clear.cgColor
         
         if #available(iOS 16.0, *) {
             secondarylLayer.cornerCurve = .continuous
