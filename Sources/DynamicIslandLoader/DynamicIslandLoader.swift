@@ -69,7 +69,7 @@ public class DynamicIslandLoader: UIView, CAAnimationDelegate {
     private func initLoaderLayers() {
         let size = CGSize(width: 126.0, height: 37.33)
         let origin = CGPoint(x: UIScreen.main.bounds.midX - size.width / 2,
-                             y: is16ProSeries ? 14 : 11)
+                             y: dynamicIslandYPosition)
         let rect = CGRect(origin: origin, size: CGSize(width: 126.0, height: 37.33))
         let cornerRadius = size.width / 2
         let dynamicIslandPath = UIBezierPath(roundedRect: rect,
@@ -155,8 +155,35 @@ extension DynamicIslandLoader {
         return  identifier == "iPhone17,1" || identifier == "iPhone17,2"
     }
     
+    var is17Series: Bool {
+        return  identifier == "iPhone18,1" || identifier == "iPhone18,2" ||
+                identifier == "iPhone18,3" || identifier == "iPhone18,4"
+    }
+    
+    var is17ProSeries: Bool {
+        return  identifier == "iPhone18,1" || identifier == "iPhone18,2"
+    }
+    
+    var is17RegularSeries: Bool {
+        return  identifier == "iPhone18,3"
+    }
+    
+    var is17AirSeries: Bool {
+        return identifier == "iPhone18,4"
+    }
+    
+    private var dynamicIslandYPosition: CGFloat {
+        if is16ProSeries || is17ProSeries || is17RegularSeries {
+            return 14
+        } else if is17AirSeries {
+            return 20
+        } else {
+            return 11
+        }
+    }
+    
     public var hasIsland: Bool {
-        return is14Series || is15Series || is16Series
+        return is14Series || is15Series || is16Series || is17Series
     }
     
     public var isAvailable: Bool {
